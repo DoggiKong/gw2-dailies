@@ -1,7 +1,15 @@
+body {
+    margin: 1rem 0;
+}
+
 main {
     width: 80%;
     text-align: center;
     margin: auto;
+}
+
+footer {
+    text-align: center;
 }
 
 h1 {
