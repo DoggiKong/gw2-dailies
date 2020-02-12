@@ -1,0 +1,20 @@
+main {
+    width: 80%;
+    text-align: center;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+.achievement-card {
+
+}
+
+.achievement-card > .achievement-card-title {
+    font-weight: bold;
+}
+.achievement-card > .achievement-card-requirement {
+    
+}
