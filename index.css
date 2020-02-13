@@ -27,6 +27,10 @@ h1 {
     
 }
 
+.achievement-card > .achievement-card-reward .achievement-card-reward-img {
+    width: 30px;
+}
+
 #dayToggleBtn {
     width: 50%;
     max-width: 350px;

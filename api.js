@@ -1,3 +1,4 @@
+// Fetch APIs
 async function fetchDailyAchievements() {
     const response = await fetch("https://api.guildwars2.com/v2/achievements/daily");
     return response.json();
@@ -13,6 +14,11 @@ async function fetchAchievements(achievementIds) {
     return response.json();
 }
 
+async function fetchItem(itemId) {
+    const response = await fetch("https://api.guildwars2.com/v2/items/" + itemId);
+    return response.json();
+}
+
 function writeToDailyAchievements(text) {
     document.getElementById("dailyAchievements").innerText += text;
 }
@@ -21,8 +27,9 @@ function appendToChild(modeId, div) {
     document.getElementById(modeId).appendChild(div);
 }
 
+// Generate Dailies Cards
+
 function generateAchievementCardDiv(element) {
-    console.log(element);
     const achievementCardDiv = document.createElement("div");
     achievementCardDiv.setAttribute("class", "achievement-card");
     // Title 
@@ -33,8 +40,17 @@ function generateAchievementCardDiv(element) {
 
     // Goal
     achievementCardDiv.appendChild(generateAchievementCardDivGoal(element.tiers[0].count));
+    
+    // Rewards
+    element.rewards.forEach(async reward => {
+        const fetchItemResponse = await fetchItem(reward.id);
+        achievementCardDiv.appendChild(generateAchievementCardDivReward(fetchItemResponse, reward.count));
+    });
+    
     return achievementCardDiv;
 }
+
+// Dailies Card div inner components
 
 function generateAchievementCardDivTitle(titleText) {
     const achievementCardDivTitle = document.createElement("p");
@@ -55,6 +71,31 @@ function generateAchievementCardDivGoal(goalText) {
     achievementCardDivGoal.setAttribute("class", "achievement-card-goal");
     achievementCardDivGoal.innerText = "Target: " + goalText;
     return achievementCardDivGoal;
+}
+
+function generateAchievementCardDivReward(itemJsonObject, quantity) {
+    const achievementCardDivReward = document.createElement("p");
+    achievementCardDivReward.setAttribute("class", "achievement-card-reward");
+
+    // Generate image with wiki link
+    const rewardItemLink = document.createElement("a");
+    rewardItemLink.setAttribute("href", "https://wiki.guildwars2.com/wiki/" 
+            + itemJsonObject.name.split(' ').join('_'));
+    rewardItemLink.setAttribute("target", "_target");
+    rewardItemLink.appendChild(generateIconImg(itemJsonObject.icon, itemJsonObject.name))
+
+    achievementCardDivReward.appendChild(rewardItemLink);
+    achievementCardDivReward.innerHTML += " x " + quantity;
+    return achievementCardDivReward;
+}
+
+function generateIconImg(iconUrl, iconAlt) {
+    const iconImg = document.createElement("img");
+    iconImg.setAttribute("class", "achievement-card-reward-img")
+    iconImg.setAttribute("src", iconUrl);
+    iconImg.setAttribute("alt", iconAlt);
+    iconImg.setAttribute("title", iconAlt);
+    return iconImg;
 }
 
 function generateSpinner() {
