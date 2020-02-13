@@ -98,6 +98,7 @@ function generateIconImg(iconUrl, iconAlt) {
     return iconImg;
 }
 
+// Helper generator
 function generateSpinner() {
     const spinner = document.createElement("div");
     spinner.setAttribute("class", "spinner-border");
@@ -122,6 +123,8 @@ function setSpinnerOnAllFields() {
     document.getElementById("pvpDailies").appendChild(generateSpinner());
     document.getElementById("wvwDailies").appendChild(generateSpinner());
 }
+
+// Generate Cards entry
 
 async function generateCards(dailyAchievementsResponse) {
     // PVE Dailies
@@ -164,3 +167,17 @@ async function generateTomorrowAchievementCards() {
     const tomorrowAchievementsResponse = await fetchTomorrowAchievements();
     generateCards(tomorrowAchievementsResponse);
 }
+
+function onload() {
+    utcClock();
+    generateAchievementCards();
+}
+
+// Dates
+function utcClock() {
+    setInterval(() => {
+        const time = new Date().toUTCString();
+        document.getElementById("utcClock").innerText = time;
+    }, 1000);
+}
+
