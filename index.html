@@ -13,6 +13,13 @@
         <h1>Guild Wars 2 Daily Achievements</h1>
         <hr /> 
         <section>
+            <div id="toggleTodayTomorrow">
+                <div id="dayToggleBtn" class="btn-group btn-group-sm flex-wrap" role="group" aria-label="dayToggleBtn">
+                    <button type="button" id="toggleTodayBtn" class="btn btn-secondary active" onclick="generateAchievementCards()">Today</button>
+                    <button type="button" id="toggleTomorrowBtn" class="btn btn-secondary" onclick="generateTomorrowAchievementCards()">Tomorrow</button>
+                </div>
+            </div>
+            <hr />
             <div id="dailyAchievements">
                 <h2>Player vs Environment</h2>
                 <div id="pveDailies">

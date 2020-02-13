@@ -26,3 +26,12 @@ h1 {
 .achievement-card > .achievement-card-requirement {
     
 }
+
+#dayToggleBtn {
+    width: 50%;
+    max-width: 350px;
+}
+
+#toggleTodayBtn, #toggleTomorrowBtn {
+    min-width: 100px;
+}

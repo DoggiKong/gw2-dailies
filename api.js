@@ -3,6 +3,11 @@ async function fetchDailyAchievements() {
     return response.json();
 }
 
+async function fetchTomorrowAchievements() {
+    const response = await fetch("https://api.guildwars2.com/v2/achievements/daily/tomorrow");
+    return response.json();
+}
+
 async function fetchAchievements(achievementIds) {
     const response = await fetch("https://api.guildwars2.com/v2/achievements?ids=" + achievementIds)
     return response.json();
@@ -52,8 +57,32 @@ function generateAchievementCardDivGoal(goalText) {
     return achievementCardDivGoal;
 }
 
-async function generateAchievementCards() {
-    const dailyAchievementsResponse = await fetchDailyAchievements();
+function generateSpinner() {
+    const spinner = document.createElement("div");
+    spinner.setAttribute("class", "spinner-border");
+    spinner.setAttribute("role", "status");
+
+    const innerSpinner = document.createElement("span");
+    innerSpinner.setAttribute("class", "sr-only");
+    innerSpinner.innerText = "Loading...";
+
+    spinner.appendChild(innerSpinner);
+    return spinner;
+}
+
+function setSpinnerOnAllFields() {
+    // Clear
+    document.getElementById("pveDailies").innerHTML = "";
+    document.getElementById("pvpDailies").innerHTML = "";
+    document.getElementById("wvwDailies").innerHTML = "";
+
+    // Spinner
+    document.getElementById("pveDailies").appendChild(generateSpinner());
+    document.getElementById("pvpDailies").appendChild(generateSpinner());
+    document.getElementById("wvwDailies").appendChild(generateSpinner());
+}
+
+async function generateCards(dailyAchievementsResponse) {
     // PVE Dailies
     const pveAchievements = dailyAchievementsResponse.pve.map(achievement => achievement.id);
     let achievements = await fetchAchievements(pveAchievements.join(','));
@@ -77,4 +106,20 @@ async function generateAchievementCards() {
     achievements.forEach(element => {
         appendToChild("wvwDailies", generateAchievementCardDiv(element)); 
     });
+}
+
+async function generateAchievementCards() {
+    document.getElementById("toggleTodayBtn").setAttribute("class", "btn btn-secondary active");
+    document.getElementById("toggleTomorrowBtn").setAttribute("class", "btn btn-secondary");
+    setSpinnerOnAllFields();
+    const dailyAchievementsResponse = await fetchDailyAchievements();
+    generateCards(dailyAchievementsResponse);
+}
+
+async function generateTomorrowAchievementCards() {
+    document.getElementById("toggleTodayBtn").setAttribute("class", "btn btn-secondary");
+    document.getElementById("toggleTomorrowBtn").setAttribute("class", "btn btn-secondary active");
+    setSpinnerOnAllFields();
+    const tomorrowAchievementsResponse = await fetchTomorrowAchievements();
+    generateCards(tomorrowAchievementsResponse);
 }
